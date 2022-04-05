@@ -30,7 +30,7 @@ public final class LecternCrashFix extends JavaPlugin {
                 Player player = event.getPlayer();
                 InventoryView inv = player.getOpenInventory();
                 if (inv.getType() == InventoryType.LECTERN) {
-                    if (packet.getSlot() == 1) {
+                    if (packet.getShift() == WrapperPlayClientWindowClick.InventoryClickType.QUICK_MOVE) {
                         event.setCancelled(true);
                         logger.warning(player.getName() + " tried to illegally click a slot in a lectern!");
                     }
