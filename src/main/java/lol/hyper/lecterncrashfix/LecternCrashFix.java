@@ -15,7 +15,7 @@ import java.util.logging.Logger;
 
 public final class LecternCrashFix extends JavaPlugin {
 
-    private Logger logger = this.getLogger();
+    private final Logger logger = this.getLogger();
 
     @Override
     public void onEnable() {
@@ -32,7 +32,7 @@ public final class LecternCrashFix extends JavaPlugin {
                 if (inv.getType() == InventoryType.LECTERN) {
                     if (packet.getShift() == WrapperPlayClientWindowClick.InventoryClickType.QUICK_MOVE) {
                         event.setCancelled(true);
-                        logger.warning(player.getName() + " tried to illegally click a slot in a lectern!");
+                        logger.warning(player.getName() + " tried to illegally click a slot in a lectern! Location: " + player.getLocation());
                     }
                 }
             }
