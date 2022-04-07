@@ -1,5 +1,5 @@
 name: LecternCrashFix
 version: '${project.version}'
 main: lol.hyper.lecterncrashfix.LecternCrashFix
-api-version: 1.18
+api-version: 1.16
 depend: [ProtocolLib]
