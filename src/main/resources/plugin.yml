@@ -3,3 +3,5 @@ version: '${project.version}'
 main: lol.hyper.lecterncrashfix.LecternCrashFix
 api-version: 1.14
 depend: [ProtocolLib]
+libraries:
+  - lol.hyper:github-release-api:1.0.1
