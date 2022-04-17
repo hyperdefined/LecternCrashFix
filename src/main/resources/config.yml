@@ -1,0 +1,10 @@
+# Run a command when a player tries to do the exploit.
+run-command: true
+
+# Command to run.
+# %player%
+# %location%
+# %uuid%
+command: "ban %player%"
+
+config-version: 1

@@ -25,17 +25,14 @@ import com.comphenix.protocol.events.PacketContainer;
 
 public class WrapperPlayClientWindowClick extends AbstractPacket {
     public static final PacketType TYPE = PacketType.Play.Client.WINDOW_CLICK;
-    private final int VERSION;
 
-    public WrapperPlayClientWindowClick(int version) {
+    public WrapperPlayClientWindowClick() {
         super(new PacketContainer(TYPE), TYPE);
-        VERSION = version;
         handle.getModifier().writeDefaults();
     }
 
-    public WrapperPlayClientWindowClick(PacketContainer packet, int version) {
+    public WrapperPlayClientWindowClick(PacketContainer packet) {
         super(packet, TYPE);
-        VERSION = version;
     }
 
     /**
@@ -138,15 +135,18 @@ public class WrapperPlayClientWindowClick extends AbstractPacket {
     }
 
     public InventoryClickType getShift() {
-        // index changes here because versions use different ones idk
-        int index = 0;
-        if (VERSION == 16) {
-            index = 5;
+        InventoryClickType inventoryClickType = null;
+        // cycle through the packet
+        // see if any data matches a click type
+        // this should help with older versions
+        for (int i = 0; i < 6; i++) {
+            try {
+                inventoryClickType = handle.getEnumModifier(InventoryClickType.class, i).read(0);
+            } catch (Exception ignored) {
+                // ignore any exceptions here
+            }
         }
-        if (VERSION >= 17) {
-            index = 4;
-        }
-        return handle.getEnumModifier(InventoryClickType.class, index).read(0);
+        return inventoryClickType;
     }
 
     public void setShift(InventoryClickType value) {
