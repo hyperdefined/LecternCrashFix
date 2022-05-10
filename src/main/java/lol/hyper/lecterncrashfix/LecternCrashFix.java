@@ -80,7 +80,7 @@ public final class LecternCrashFix extends JavaPlugin {
             command = command.replace("%location%", player.getLocation().toString());
         }
         String finalCommand = command;
-        Bukkit.getScheduler().runTaskLater(this, ()-> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand), 20);
+        Bukkit.getScheduler().runTaskLater(this, () -> Bukkit.dispatchCommand(Bukkit.getConsoleSender(), finalCommand), 20);
     }
 
     public void checkForUpdates() {
