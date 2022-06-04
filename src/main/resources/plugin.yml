@@ -2,4 +2,4 @@ name: LecternCrashFix
 version: '${project.version}'
 main: lol.hyper.lecterncrashfix.LecternCrashFix
 api-version: 1.14
-depend: [ProtocolLib]
+load: POSTWORLD

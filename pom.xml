@@ -59,6 +59,10 @@
                                     <pattern>org.bstats</pattern>
                                     <shadedPattern>lol.hyper.lecterncrashfix.bstats</shadedPattern>
                                 </relocation>
+                                <relocation>
+                                    <pattern>com.github.retrooper.packetevents</pattern>
+                                    <shadedPattern>lol.hyper.lecterncrashfix.packetevents</shadedPattern>
+                                </relocation>
                             </relocations>
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                         </configuration>
@@ -80,8 +84,8 @@
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
         <repository>
-            <id>dmulloy2-repo</id>
-            <url>https://repo.dmulloy2.net/repository/public/</url>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io/</url>
         </repository>
     </repositories>
 
@@ -89,14 +93,13 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.18.1-R0.1-SNAPSHOT</version>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>com.comphenix.protocol</groupId>
-            <artifactId>ProtocolLib</artifactId>
-            <version>4.7.0</version>
-            <scope>provided</scope>
+            <groupId>com.github.retrooper.packetevents</groupId>
+            <artifactId>spigot</artifactId>
+            <version>2.0-1724f54b12-1</version>
         </dependency>
         <dependency>
             <groupId>org.bstats</groupId>

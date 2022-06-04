@@ -1,20 +1,15 @@
 package lol.hyper.lecterncrashfix;
 
-import com.comphenix.protocol.PacketType;
-import com.comphenix.protocol.ProtocolLibrary;
-import com.comphenix.protocol.events.ListenerPriority;
-import com.comphenix.protocol.events.PacketAdapter;
-import com.comphenix.protocol.events.PacketEvent;
+import com.github.retrooper.packetevents.PacketEvents;
+import io.github.retrooper.packetevents.factory.spigot.SpigotPacketEventsBuilder;
 import lol.hyper.githubreleaseapi.GitHubRelease;
 import lol.hyper.githubreleaseapi.GitHubReleaseAPI;
-import lol.hyper.lecterncrashfix.wrapper.WrapperPlayClientWindowClick;
+import lol.hyper.lecterncrashfix.events.InventoryClick;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
@@ -23,13 +18,23 @@ import java.util.logging.Logger;
 
 public final class LecternCrashFix extends JavaPlugin {
 
-    private final Logger logger = this.getLogger();
+    public final Logger logger = this.getLogger();
     final int CONFIG_VERSION = 1;
     private final File configFile = new File(this.getDataFolder(), "config.yml");
     public FileConfiguration config;
 
+    public InventoryClick inventoryClick;
+
+    @Override
+    public void onLoad() {
+        PacketEvents.setAPI(SpigotPacketEventsBuilder.build(this));
+        PacketEvents.getAPI().getSettings().checkForUpdates(true).bStats(true);
+        PacketEvents.getAPI().load();
+    }
+
     @Override
     public void onEnable() {
+        inventoryClick = new InventoryClick(this);
         if (!configFile.exists()) {
             this.saveResource("config.yml", true);
         }
@@ -42,30 +47,16 @@ public final class LecternCrashFix extends JavaPlugin {
 
         new Metrics(this, 14959);
 
-        ProtocolLibrary.getProtocolManager().addPacketListener(new PacketAdapter(this, ListenerPriority.HIGHEST, PacketType.Play.Client.WINDOW_CLICK) {
-            @Override
-            public void onPacketReceiving(PacketEvent event) {
-                if (event.getPlayer() == null) {
-                    return;
-                }
-
-                WrapperPlayClientWindowClick packet = new WrapperPlayClientWindowClick(event.getPacket());
-                Player player = event.getPlayer();
-                InventoryView inv = player.getOpenInventory();
-                if (inv.getType() == InventoryType.LECTERN) {
-                    if (packet.getShift() == WrapperPlayClientWindowClick.InventoryClickType.QUICK_MOVE) {
-                        event.setCancelled(true);
-                        logger.warning(player.getName() + " tried to illegally click a slot in a lectern! Location: " + player.getLocation());
-                        if (config.getBoolean("run-command")) {
-                            runCommand(player);
-                        }
-                    }
-                }
-            }
-        });
+        PacketEvents.getAPI().getEventManager().registerListener(inventoryClick);
+        PacketEvents.getAPI().init();
     }
 
-    private void runCommand(Player player) {
+    @Override
+    public void onDisable() {
+        PacketEvents.getAPI().terminate();
+    }
+
+    public void runCommand(Player player) {
         String command = config.getString("command");
         if (command == null || command.isEmpty()) {
             return;
